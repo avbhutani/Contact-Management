@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import UpdatePage from '../pages/UpdatePage';
+import './ContactTable.css'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ContactTable = () => {
     const [contacts, setContacts] = useState([]);
     const [selectedContact, setSelectedContact] = useState(null);
+    const [rowId,setRowId] = useState(null)
+
     const navigate = useNavigate()
-    // Fetch contacts
+
     const fetchContacts = async () => {
         try {
             const response = await axios.get('http://localhost:4000/contacts');
@@ -19,16 +25,17 @@ const ContactTable = () => {
     const deleteContact = async (id) => {
         try {
             await axios.delete(`http://localhost:4000/contacts/${id}`);
-            alert('Contact deleted successfully');
-            fetchContacts(); // Refresh the contact list
+            // alert('Contact deleted successfully');
+            toast('Contact Deleted Successfully!')
+            fetchContacts(); 
         } catch (error) {
             console.error('Error deleting contact:', error);
         }
     };
     const updateContact = async (id) => {
         try {
-            navigate(`/contacts/${id}`)
-            
+            setRowId(id)
+            fetchContacts()
         } catch (error) {
             console.log('Error Updating Contact',error)
         }
@@ -40,6 +47,7 @@ const ContactTable = () => {
 
     return (
         <div style={{ padding: '20px' }}>
+            <ToastContainer />
             <h1>Contact List</h1>
             <table border="1" cellPadding="10" style={{ width: '100%', textAlign: 'left' }}>
                 <thead>
@@ -63,21 +71,22 @@ const ContactTable = () => {
                                 cursor: 'pointer',
                             }}
                         >
-                            <td>{contact.firstName}</td>
-                            <td>{contact.lastName}</td>
-                            <td>{contact.email}</td>
-                            <td>{contact.phoneNumber}</td>
-                            <td>{contact.company}</td>
+                            <td>{contact.firstName  || 'N/A'}</td>
+                            <td>{contact.lastName  || 'N/A'}</td>
+                            <td>{contact.email || 'N/A'}</td>
+                            <td>{contact.phoneNumber || 'N/A'}</td>
+                            <td>{contact.company || 'N/A'}</td>
                             <td>{contact.jobTitle}</td>
                             <td>
                                 <button onClick={() => deleteContact(contact._id)}>Delete</button>
-                            <button onClick={() => updateContact(contact._id)}>Update</button>
+                                <button onClick={() => updateContact(contact._id)}>Update</button>
                             </td>
                             
                         </tr>
                     ))}
                 </tbody>
             </table>
+            {rowId ? <UpdatePage id={rowId}/> : <></>}
         </div>
     );
 };

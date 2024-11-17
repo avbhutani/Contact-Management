@@ -9,8 +9,9 @@ import axios from 'axios';
 const MainPage = ()=> {
     return (
         <>
-
-    <ContactTable />
+        <div>
+        <ContactTable />
+        </div>
     </>
     )
 }

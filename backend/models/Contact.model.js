@@ -3,23 +3,29 @@ const mongoose = require('mongoose')
 const ContactSchema = new mongoose.Schema({
     firstName:{
         type:String,
-        required:true
+        required:true,
+        default:'N/A'
     },
     lastName:{
-        type:String
+        type:String,
+        default:'N/A'
     },
     email: {
         type:String,
-        required:true
+        required:true,
+        default:'N/A'
     },
     phoneNumber:{
         type:String,
+        default:'N/A'
     },
     company: {
-        type:String
+        type:String,
+        default:'N/A'
     },
     jobTitle: {
-        type:String
+        type:String,
+        default:'N/A'
     }
 },{timestamps:true})
 
